@@ -51,16 +51,41 @@
 // };
 
 // export default Quiz;   
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import questions from "../data/questions";
+
+const TOTAL_TIME = 600; // 10 minutes
 
 const Quiz = () => {
   const navigate = useNavigate();
 
   const [answers, setAnswers] = useState({});
+  const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
+  const [submitted, setSubmitted] = useState(false);
 
-  // option select
+  // ================= TIMER =================
+  useEffect(() => {
+    if (timeLeft <= 0) {
+      handleSubmit(); // auto submit
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  // ================= FORMAT TIME =================
+  const formatTime = (seconds) => {
+    const min = Math.floor(seconds / 60);
+    const sec = seconds % 60;
+    return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+  };
+
+  // ================= SELECT ANSWER =================
   const handleSelect = (questionIndex, option) => {
     setAnswers({
       ...answers,
@@ -68,10 +93,14 @@ const Quiz = () => {
     });
   };
 
-  // submit quiz
+  // ================= SUBMIT QUIZ =================
   const handleSubmit = () => {
+    if (submitted) return;
+    setSubmitted(true);
+
     if (Object.keys(answers).length !== questions.length) {
       alert("Please attempt all questions");
+      setSubmitted(false);
       return;
     }
 
@@ -90,12 +119,9 @@ const Quiz = () => {
       ...student,
       score,
       total: questions.length,
-      percentage: Math.round(
-        (score / questions.length) * 100
-      ),
+      percentage: Math.round((score / questions.length) * 100),
     };
 
-    // all students result save
     const oldResults =
       JSON.parse(localStorage.getItem("results")) || [];
 
@@ -104,13 +130,13 @@ const Quiz = () => {
       JSON.stringify([...oldResults, resultData])
     );
 
-    // current student result
     localStorage.setItem("score", score);
     localStorage.setItem("total", questions.length);
 
     navigate("/result");
   };
 
+  // ================= UI =================
   return (
     <div
       className="min-h-screen bg-cover bg-center p-6"
@@ -121,21 +147,24 @@ const Quiz = () => {
     >
       <div className="max-w-6xl mx-auto space-y-8">
 
-        {/* ALL QUESTIONS */}
+        {/* TIMER */}
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-red-600 bg-white inline-block px-6 py-2 rounded-xl shadow">
+            Time Left: {formatTime(timeLeft)}
+          </h2>
+        </div>
+
+        {/* QUESTIONS */}
         {questions.map((q, qIndex) => (
           <div
             key={qIndex}
             className="bg-white rounded-xl shadow-xl overflow-hidden"
           >
-
-            {/* Question Header */}
             <div className="bg-[#0E5D84] text-white p-5 text-2xl font-semibold">
               {qIndex + 1}. {q.question}
             </div>
 
-            {/* Options */}
             <div className="p-8 space-y-5">
-
               {q.options.map((option, optIndex) => (
                 <label
                   key={optIndex}
@@ -156,16 +185,14 @@ const Quiz = () => {
                     }
                     className="w-6 h-6 accent-[#0E5D84]"
                   />
-
                   <span>{option}</span>
                 </label>
               ))}
-
             </div>
           </div>
         ))}
 
-        {/* Submit Button */}
+        {/* SUBMIT BUTTON */}
         <div className="flex justify-center pb-10">
           <button
             onClick={handleSubmit}
