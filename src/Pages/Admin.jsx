@@ -5,8 +5,8 @@ const Admin = () => {
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("results")) || [];
-    setResults(data);
-  }, []);
+    setResults(data);  
+  }, []);   
 
   return (
     <div className="min-h-screen p-10 bg-gray-100">
@@ -14,9 +14,9 @@ const Admin = () => {
       <h1 className="text-3xl font-bold mb-6">Admin Panel</h1>
 
       <table className="w-full bg-white shadow-lg rounded-xl overflow-hidden">
-        <thead className="bg-blue-500 text-white">
+        <thead className="bg-blue-500 text-white">   
           <tr>
-            <th className="p-3">Name</th>
+            <th className="p-3">Name</th>   
             <th>ID Card</th>
             <th>Semester</th>
             <th>Department</th>

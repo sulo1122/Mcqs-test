@@ -21,6 +21,7 @@ import Home from "./Pages/Home";
 import Quiz from "./Pages/Quiz";
 import Result from "./Pages/Result";
 import Admin from "./Pages/Admin";
+import HelpingMaterial from "./Pages/HelpingMaterial";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/result" element={<Result />} />
         <Route path="/admin" element={<Admin />} />
+        <Route path="/materials" element={<HelpingMaterial/>}/>
       </Routes>
     </BrowserRouter>
   );

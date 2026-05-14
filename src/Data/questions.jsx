@@ -26,7 +26,7 @@ const questions = [
     question: "How many cranial nerves are present in the human body?",
     options: ["10 pairs", "12 pairs", "14 pairs", "16 pairs"],
     answer: "12 pairs",
-  },
+  },  
 
   {
     question: "The study of tissues is called:",

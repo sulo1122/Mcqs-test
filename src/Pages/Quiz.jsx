@@ -109,22 +109,31 @@ const Quiz = () => {
 
     clearInterval(timerRef.current);
 
-    let score = 0;
+   let score = 0;
 
-    questions.forEach((q, index) => {
-      if (answers[index] === q.answer) {
-        score++;
-      }
-    });
+const detailedAnswers = questions.map((q, index) => {
+  const isCorrect = answers[index] === q.answer;
 
+  if (isCorrect) score++;
+
+  return {
+    question: q.question,
+    selected: answers[index] || "Not Answered",
+    correct: q.answer,
+    isCorrect,
+  };
+});
     const student = JSON.parse(localStorage.getItem("student")) || {};
 
     const resultData = {
-      ...student,
-      score,
-      total: questions.length,
-      percentage: Math.round((score / questions.length) * 100),
-    };
+  ...student,
+  score,
+  total: questions.length,
+  percentage: Math.round((score / questions.length) * 100),
+  review: detailedAnswers,   // ⭐ NEW ADD
+};
+
+localStorage.setItem("resultDetail", JSON.stringify(resultData));
 
     const oldResults =
       JSON.parse(localStorage.getItem("results")) || [];

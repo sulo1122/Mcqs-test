@@ -87,8 +87,8 @@
 
 // export default Home;   
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import bg from "../assets/bg.jpg";
+import { useNavigate } from "react-router-dom";   
+import bg from "../assets/bg.jpg";  
 
 const Home = () => {
   const navigate = useNavigate();
@@ -136,7 +136,7 @@ const Home = () => {
           Online MCQs Test
         </h1>
 
-        <p className="text-center text-gray-200 mb-8">
+        <p className="text-center text-gray-200 mb-8">   
           Fill your details carefully before starting test
         </p>
 
@@ -148,7 +148,7 @@ const Home = () => {
             placeholder="Enter Name"
             onChange={handleChange}
             className="p-3 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-orange-400"
-          />
+          />  
 
           <input
             type="text"
@@ -156,7 +156,7 @@ const Home = () => {
             placeholder="ID Card Number"
             onChange={handleChange}
             className="p-3 rounded-lg bg-white/10 border border-white/20 outline-none focus:border-orange-400"
-          />
+          />    
 
           <input
             type="text"
