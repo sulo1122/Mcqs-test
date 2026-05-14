@@ -130,6 +130,7 @@ const Home = () => {
       style={{ backgroundImage: `url(${bg})` }}
     >
       <div className="bg-black/60 w-full max-w-3xl rounded-2xl p-8 text-white shadow-2xl">
+      <h1 className="text-6xl font-bold text-center mb-3"> MMDC Academy</h1>
 
         <h1 className="text-4xl font-bold text-center mb-3">
           Online MCQs Test

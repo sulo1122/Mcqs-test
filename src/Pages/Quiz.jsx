@@ -51,7 +51,7 @@
 // };
 
 // export default Quiz;   
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import questions from "../data/questions";
 
@@ -59,6 +59,7 @@ const TOTAL_TIME = 600; // 10 minutes
 
 const Quiz = () => {
   const navigate = useNavigate();
+  const timerRef = useRef(null);
 
   const [answers, setAnswers] = useState({});
   const [timeLeft, setTimeLeft] = useState(TOTAL_TIME);
@@ -66,43 +67,47 @@ const Quiz = () => {
 
   // ================= TIMER =================
   useEffect(() => {
-    if (timeLeft <= 0) {
-      handleSubmit(); // auto submit
-      return;
-    }
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current);
 
-    const timer = setInterval(() => {
-      setTimeLeft((prev) => prev - 1);
+          // AUTO SUBMIT
+          handleSubmit(true);
+
+          return 0;
+        }
+
+        return prev - 1;
+      });
     }, 1000);
 
-    return () => clearInterval(timer);
-  }, [timeLeft]);
+    return () => clearInterval(timerRef.current);
+  }, []);
 
   // ================= FORMAT TIME =================
   const formatTime = (seconds) => {
     const min = Math.floor(seconds / 60);
     const sec = seconds % 60;
+
     return `${min}:${sec < 10 ? "0" : ""}${sec}`;
   };
 
   // ================= SELECT ANSWER =================
   const handleSelect = (questionIndex, option) => {
-    setAnswers({
-      ...answers,
+    setAnswers((prev) => ({
+      ...prev,
       [questionIndex]: option,
-    });
+    }));
   };
 
   // ================= SUBMIT QUIZ =================
-  const handleSubmit = () => {
+  const handleSubmit = (isAuto = false) => {
     if (submitted) return;
+
     setSubmitted(true);
 
-    if (Object.keys(answers).length !== questions.length) {
-      alert("Please attempt all questions");
-      setSubmitted(false);
-      return;
-    }
+    clearInterval(timerRef.current);
 
     let score = 0;
 
@@ -112,8 +117,7 @@ const Quiz = () => {
       }
     });
 
-    const student =
-      JSON.parse(localStorage.getItem("student")) || {};
+    const student = JSON.parse(localStorage.getItem("student")) || {};
 
     const resultData = {
       ...student,
@@ -133,6 +137,7 @@ const Quiz = () => {
     localStorage.setItem("score", score);
     localStorage.setItem("total", questions.length);
 
+    // RESULT PAGE
     navigate("/result");
   };
 
@@ -180,11 +185,10 @@ const Quiz = () => {
                     name={`question-${qIndex}`}
                     value={option}
                     checked={answers[qIndex] === option}
-                    onChange={() =>
-                      handleSelect(qIndex, option)
-                    }
+                    onChange={() => handleSelect(qIndex, option)}
                     className="w-6 h-6 accent-[#0E5D84]"
                   />
+
                   <span>{option}</span>
                 </label>
               ))}
@@ -195,10 +199,11 @@ const Quiz = () => {
         {/* SUBMIT BUTTON */}
         <div className="flex justify-center pb-10">
           <button
-            onClick={handleSubmit}
-            className="bg-green-600 hover:bg-green-700 text-white px-12 py-4 rounded-xl text-2xl font-bold duration-300 shadow-lg"
+            onClick={() => handleSubmit(false)}
+            disabled={submitted}
+            className="bg-green-600 hover:bg-green-700 text-white px-12 py-4 rounded-xl text-2xl font-bold duration-300 shadow-lg disabled:opacity-50"
           >
-            Submit Quiz
+            {submitted ? "Submitting..." : "Submit Quiz"}
           </button>
         </div>
 
