@@ -55,7 +55,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import questions from "../data/questions";
 
-const TOTAL_TIME = 600; // 10 minutes
+const TOTAL_TIME = 900; // 10 minutes
 
 const Quiz = () => {
   const navigate = useNavigate();
