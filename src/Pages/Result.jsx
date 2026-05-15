@@ -32,7 +32,7 @@ const Result = () => {
     if (percentage >= 90) return { text: "Outstanding 🔥", color: "text-green-600" };
     if (percentage >= 70) return { text: "Very Good 🚀", color: "text-blue-600" };
     if (percentage >= 50) return { text: "Good 👍", color: "text-yellow-600" };
-    return { text: "Need Improvement 📚", color: "text-red-600" };
+    return { text: "Need Improvement 📚", color: "text-red-600" };   
   };
 
   const p = getPerformance();
@@ -50,13 +50,13 @@ const Result = () => {
     const doc = new jsPDF();
 
     doc.setFontSize(18);
-    doc.text("Student Result Report", 60, 20);
+    doc.text("Student Result Report", 60, 20);     
 
     doc.setFontSize(12);
     doc.text(`Name: ${data?.name}`, 14, 40);
     doc.text(`ID: ${data?.idcard}`, 14, 50);
     doc.text(`Department: ${data?.department}`, 14, 60);
-    doc.text(`Semester: ${data?.semester}`, 14, 70);
+    doc.text(`Semester: ${data?.semester}`, 14, 70);   
 
     doc.text(`Score: ${correct}/${total}`, 14, 85);
     doc.text(`Attempted: ${attempted}`, 14, 95);

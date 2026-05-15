@@ -370,7 +370,7 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import questions from "../data/questions";
 
-const TOTAL_TIME = 900;
+const TOTAL_TIME = 1200;
 
 const Quiz = () => {
   const navigate = useNavigate();
