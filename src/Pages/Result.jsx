@@ -4,7 +4,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 const Result = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate();     
 
   const data = JSON.parse(localStorage.getItem("resultDetail"));
   const review = data?.review || [];
